@@ -1,0 +1,6 @@
+-- A second example using negation and multiplication.
+absVal :: Int -> Int
+requires True
+ensures result >= 0
+ensures result == x || result == -x
+absVal x = if x >= 0 then x else -x

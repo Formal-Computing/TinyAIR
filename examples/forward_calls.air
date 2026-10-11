@@ -1,0 +1,8 @@
+-- Forward references and acyclic, nested calls need no decreases.
+twice :: Int -> Int
+ensures result == x + 2
+twice x = inc(inc(x))
+
+inc :: Int -> Int
+ensures result == x + 1
+inc x = x + 1

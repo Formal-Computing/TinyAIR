@@ -1,0 +1,6 @@
+-- Two recursive calls: the verifier proves each decreases independently.
+fib :: Int -> Int
+requires n >= 0
+decreases n
+ensures result >= 0
+fib n = if n <= 1 then n else fib(n - 1) + fib(n - 2)

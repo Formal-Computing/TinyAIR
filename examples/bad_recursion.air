@@ -1,0 +1,6 @@
+-- This cannot be accepted: the measure never decreases.
+loop :: Int -> Int
+requires n >= 0
+decreases n
+ensures result == 0
+loop n = if n == 0 then 0 else loop(n)

@@ -1,0 +1,12 @@
+-- Exact contracts for two mutually recursive functions.
+evenCount :: Int -> Int
+requires n >= 0
+decreases n
+ensures result == n
+evenCount n = if n == 0 then 0 else 1 + oddCount(n - 1)
+
+oddCount :: Int -> Int
+requires n >= 0
+decreases n
+ensures result == n
+oddCount n = if n == 0 then 0 else 1 + evenCount(n - 1)

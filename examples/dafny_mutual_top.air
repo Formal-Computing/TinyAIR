@@ -1,0 +1,16 @@
+-- Dafny short form uses implicit TOP:
+-- A effective rank: (x, TOP); B effective rank: (x, 0, TOP).
+-- A -> B: (x, 0, TOP) < (x, TOP).
+-- B -> A: (x-1, TOP) < (x, 0, TOP), when x>0.
+
+A :: Int -> Int
+requires x >= 0
+decreases x
+ensures result == 0
+A x = B(x)
+
+B :: Int -> Int
+requires x >= 0
+decreases x, 0
+ensures result == 0
+B x = if x != 0 then A(x - 1) else 0

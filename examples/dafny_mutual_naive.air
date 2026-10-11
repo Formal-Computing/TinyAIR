@@ -1,0 +1,15 @@
+-- Negative verification example: this PROGRAM terminates, but the
+-- attempted proof fails because A(x) -> B(x) does not decrease x.
+-- The verifier must not mistake a weak ranking function for a proof.
+
+A :: Int -> Int
+requires x >= 0
+decreases x
+ensures result == 0
+A x = B(x)
+
+B :: Int -> Int
+requires x >= 0
+decreases x
+ensures result == 0
+B x = if x != 0 then A(x - 1) else 0

@@ -1,0 +1,8 @@
+-- Maximum of three arbitrary integers, including negative numbers and ties.
+max3 :: Int -> Int -> Int -> Int
+requires True
+ensures result >= a
+ensures result >= b
+ensures result >= c
+ensures result == a || result == b || result == c
+max3 a b c = if a >= b then (if a >= c then a else c) else (if b >= c then b else c)

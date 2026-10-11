@@ -1,0 +1,7 @@
+-- With both rank components constant across the recursive call,
+-- no lexicographic decrease is possible.
+stuck :: Int -> Int
+requires n >= 0
+decreases n, 0
+ensures result == 0
+stuck n = if n == 0 then 0 else stuck(n)

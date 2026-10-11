@@ -1,0 +1,17 @@
+-- True mutually recursive Boolean functions.
+-- These contracts verify the first three cases, not full parity.
+isEven :: Int -> Bool
+requires n >= 0
+decreases n
+ensures n != 0 || result == True
+ensures n != 1 || result == False
+ensures n != 2 || result == True
+isEven n = if n == 0 then True else isOdd(n - 1)
+
+isOdd :: Int -> Bool
+requires n >= 0
+decreases n
+ensures n != 0 || result == False
+ensures n != 1 || result == True
+ensures n != 2 || result == False
+isOdd n = if n == 0 then False else isEven(n - 1)

@@ -1,0 +1,8 @@
+-- Two rank components; the second may increase when the first decreases.
+-- Both entry variables are nonnegative.
+countDown :: Int -> Int -> Int
+requires n >= 0
+requires m >= 0
+decreases n, m
+ensures result >= 0
+countDown n m = if n == 0 then (if m == 0 then 0 else countDown(n, m - 1)) else countDown(n - 1, m + 1)

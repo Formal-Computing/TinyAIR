@@ -1,0 +1,54 @@
+-- TinyAIR red-black integer set: immutable insertion + membership.
+-- This is REAL TinyAIR source parsed and evaluated by the tree VC backend.
+-- Verification is symbolic for keys but bounded by the input tree size.
+data Tree = Empty | Node(Bool, Tree, Int, Tree)
+
+-- Tree selectors: empty(t), red(t), color(t), left(t), value(t), right(t).
+-- Constructors: Empty and Node(redColor, leftTree, key, rightTree).
+-- All destructors except red/empty require a nonempty tree.
+-- color=True denotes red, False denotes black.
+
+rotLL :: Tree -> Int -> Tree -> Tree
+ensures True
+rotLL l k r = Node(True, Node(False, left(left(l)), value(left(l)), right(left(l))), value(l), Node(False, right(l), k, r))
+
+rotLR :: Tree -> Int -> Tree -> Tree
+ensures True
+rotLR l k r = Node(True, Node(False, left(l), value(l), left(right(l))), value(right(l)), Node(False, right(right(l)), k, r))
+
+rotRL :: Tree -> Int -> Tree -> Tree
+ensures True
+rotRL l k r = Node(True, Node(False, l, k, left(left(r))), value(left(r)), Node(False, right(left(r)), value(r), right(r)))
+
+rotRR :: Tree -> Int -> Tree -> Tree
+ensures True
+rotRR l k r = Node(True, Node(False, l, k, left(r)), value(r), Node(False, left(right(r)), value(right(r)), right(right(r))))
+
+balance :: Bool -> Tree -> Int -> Tree -> Tree
+ensures True
+balance c l k r = if not c && red(l) && red(left(l)) then rotLL(l, k, r) else if not c && red(l) && red(right(l)) then rotLR(l, k, r) else if not c && red(r) && red(left(r)) then rotRL(l, k, r) else if not c && red(r) && red(right(r)) then rotRR(l, k, r) else Node(c, l, k, r)
+
+-- Internal insertion may temporarily have a RED root.
+ins :: Tree -> Int -> Tree
+requires True
+decreases size(t)
+ensures True
+ins t x = if empty(t) then Node(True, Empty, x, Empty) else if x < value(t) then balance(color(t), ins(left(t), x), value(t), right(t)) else if x > value(t) then balance(color(t), left(t), value(t), ins(right(t), x)) else t
+
+blacken :: Tree -> Tree
+ensures True
+blacken t = if empty(t) then Empty else Node(False, left(t), value(t), right(t))
+
+-- Public insertion's contracts specify what must be checked by Z3.
+insert :: Tree -> Int -> Tree
+requires valid(t)
+ensures valid(result)
+ensures has(result, x)
+ensures preserves(result, t, x)
+insert t x = blacken(ins(t, x))
+
+contains :: Tree -> Int -> Bool
+requires True
+decreases size(t)
+ensures result == has(t, x)
+contains t x = if empty(t) then False else if x == value(t) then True else if x < value(t) then contains(left(t), x) else contains(right(t), x)

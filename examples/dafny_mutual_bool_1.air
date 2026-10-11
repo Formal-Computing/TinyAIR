@@ -1,0 +1,14 @@
+-- Booleans in lexicographic rankings: False < True.
+-- Parenthesized syntax (x, True) is accepted too.
+
+A :: Int -> Int
+requires x >= 0
+decreases (x, False)
+ensures result == 0
+A x = B(x)
+
+B :: Int -> Int
+requires x >= 0
+decreases (x, True)
+ensures result == 0
+B x = if x != 0 then A(x - 1) else 0

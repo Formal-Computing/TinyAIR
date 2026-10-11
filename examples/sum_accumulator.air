@@ -1,0 +1,6 @@
+-- Two-argument tail recursion with an accumulator.
+sumAcc :: Int -> Int -> Int
+requires n >= 0
+decreases n
+ensures 2 * result == 2 * acc + n * (n + 1)
+sumAcc n acc = if n == 0 then acc else sumAcc(n - 1, acc + n)

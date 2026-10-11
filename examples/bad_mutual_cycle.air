@@ -1,0 +1,12 @@
+-- Both functions call each other without decreasing their measure.
+left :: Int -> Int
+requires n >= 0
+decreases n
+ensures result == 0
+left n = if n == 0 then 0 else right(n)
+
+right :: Int -> Int
+requires n >= 0
+decreases n
+ensures result == 0
+right n = if n == 0 then 0 else left(n)
